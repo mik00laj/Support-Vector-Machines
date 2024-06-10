@@ -7,6 +7,7 @@ import time
 from food import Food
 from model import game_state_to_data_sample, SVM, load_data
 from snake import Snake, Direction
+from sklearn.svm import SVC
 
 
 class HumanAgent:
@@ -50,17 +51,15 @@ class BehavioralCloningAgent:
         data_sample = game_state_to_data_sample(game_state)
         predicted_action = self.model.predict([data_sample])[0]
 
-        # Zamiana przewidzianej akcji (liczby) na kierunek
-        if predicted_action == -1:
+        # Mapowanie przewidywanej akcji na kierunek węża
+        if predicted_action == Direction.LEFT.value:
             return Direction.LEFT
-        elif predicted_action == 1:
+        elif predicted_action == Direction.RIGHT.value:
             return Direction.RIGHT
-        elif predicted_action == 2:
+        elif predicted_action == Direction.UP.value:
             return Direction.UP
-        elif predicted_action == 3:
+        elif predicted_action == Direction.DOWN.value:
             return Direction.DOWN
-
-        return Direction.DOWN
 
     def dump_data(self):
         pass
@@ -80,6 +79,8 @@ def main():
     X, y = load_data()
     # model = SVM()
     model = SVM(C=1)
+    # model = SVC()
+    # model = SVC(C=1)
     # model = HumanAgent(block_size, bounds)
     model.fit(X, y)
 
